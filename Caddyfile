@@ -1,5 +1,8 @@
 {
     email {$EMAIL}
+     storage file_system {
+        root /data
+     }
 }
 
 http://{$DOMAIN} {

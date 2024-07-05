@@ -6,7 +6,15 @@ This project provides a Docker image that runs the Ollama service with basic aut
 
 To use this Docker image, you can run the following command:
 ```
-docker run -p 80:80 -p 443:443 -e DOMAIN=my-domain.com -e EMAIL=john@my-domain.com -e TOKEN=my-token-here ghcr.io/iosifnicolae2/ollama-openai-auth:latest 
+mkdir ./data;
+docker run \
+ -p 80:80 \
+ -p 443:443 \
+ -v ./data:/data \
+ -e DOMAIN=my-domain.com \
+ -e EMAIL=john@my-domain.com \
+ -e TOKEN=my-token-here \
+ ghcr.io/iosifnicolae2/ollama-openai-auth:latest 
 ```
 This will start the Ollama service with basic authentication using the Caddy server. The service will be available at `https://my-domain.com` on the host machine. The OpenAI token authentication credentials will be set to `my-token-here`. Also, there will be provisioned an https certificate for the domain `my-domain.com` using Let's Encrypt.
 
