@@ -1,6 +1,32 @@
-:80 {
-  basicauth {
-    {$CADDY_USERNAME} {$CADDY_PASSWORD_HASH}
-  }
-  reverse_proxy localhost:11434
+{
+    email {$EMAIL}
+}
+
+http://{$DOMAIN} {
+  redir https://{host}{uri} temporary
+}
+
+https://{$DOMAIN} {
+    	@auth {
+            header Authorization *{$TOKEN}*
+        }
+
+    	route {
+    		@options method OPTIONS
+    		handle @options {
+    			header Access-Control-Allow-Origin "https://{$DOMAIN}"
+    			header Access-Control-Allow-Methods "POST"
+    			header Access-Control-Allow-Headers "authorization"
+    			header Access-Control-Allow-Credentials true
+    			respond "" 204
+    		}
+    		header ?Access-Control-Allow-Origin "https://{$DOMAIN}"
+    		header Access-Control-Allow-Methods "POST"
+    		header Access-Control-Allow-Headers "authorization"
+    		header Access-Control-Allow-Credentials true
+
+    		reverse_proxy @auth 127.0.0.1:11434
+    		respond "You are not authorized!" 403
+    	}
+
 }
